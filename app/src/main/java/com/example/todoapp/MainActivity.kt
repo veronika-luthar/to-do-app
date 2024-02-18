@@ -20,7 +20,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -90,6 +95,7 @@ fun Header(deleteIcon: ImageVector, addIcon: ImageVector, modifier: Modifier = M
 
 @Composable
 fun Item(text: String, completed: Boolean, modifier: Modifier = Modifier){
+    var checkedChange by remember { mutableStateOf(completed)}
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -97,7 +103,7 @@ fun Item(text: String, completed: Boolean, modifier: Modifier = Modifier){
         ) {
         Text(
             text = text,
-            textDecoration = if (completed) {
+            textDecoration = if (checkedChange) {
                 TextDecoration.LineThrough
             } else {
                 null
@@ -105,8 +111,10 @@ fun Item(text: String, completed: Boolean, modifier: Modifier = Modifier){
             modifier = modifier.padding(5.dp)
         )
         Checkbox(
-            checked = completed,
-            onCheckedChange = {},
+            checked = checkedChange,
+            onCheckedChange = {
+                checkedChange = !checkedChange
+            },
 
         )
     }
@@ -149,7 +157,7 @@ fun ToDoAppUI(modifier: Modifier = Modifier){
 }
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun ToDoPreview() {
     ToDoAppTheme {
         ToDoAppUI(Modifier)
     }
