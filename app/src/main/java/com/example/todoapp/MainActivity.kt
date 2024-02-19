@@ -21,9 +21,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.example.todoapp.ui.theme.ToDoAppTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -53,13 +56,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Header(deleteIcon: ImageVector, addIcon: ImageVector, modifier: Modifier = Modifier) {
+fun Header(toDoList: MutableList<ListItem>, deleteIcon: ImageVector, addIcon: ImageVector, modifier: Modifier = Modifier) {
     val buttonColors = buttonColors(containerColor = Color.Transparent, contentColor = Color.Black)
+
     // Header
     Row (
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
-
     ) {
         // Delete button
         Button(
@@ -79,7 +82,9 @@ fun Header(deleteIcon: ImageVector, addIcon: ImageVector, modifier: Modifier = M
         )
         // Add button
         Button(
-            onClick = {},
+            onClick = {
+                toDoList.add(ListItem("An item to be completed", false))
+            },
             shape = RectangleShape,
             colors = buttonColors
         ) {
@@ -95,6 +100,7 @@ fun Header(deleteIcon: ImageVector, addIcon: ImageVector, modifier: Modifier = M
 @Composable
 fun Item(text: String, completed: Boolean, modifier: Modifier = Modifier){
     var checkedChange by remember { mutableStateOf(completed)}
+
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -113,6 +119,7 @@ fun Item(text: String, completed: Boolean, modifier: Modifier = Modifier){
             checked = checkedChange,
             onCheckedChange = {
                 checkedChange = !checkedChange
+                // may need list elements
             },
 
         )
@@ -125,15 +132,17 @@ fun Item(text: String, completed: Boolean, modifier: Modifier = Modifier){
 }
 
 @Composable
-fun List(modifier: Modifier = Modifier){
+fun List(toDoList: MutableList<ListItem>, modifier: Modifier = Modifier){
 
     // List
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.Start
         ){
-        for(i in 1..10){
-            Item("Incomplete Item", false, modifier)
+        val listIterator = toDoList.iterator()
+        while (listIterator.hasNext()){
+            val currentItem = listIterator.next()
+            Item(currentItem.text, currentItem.checked, modifier)
         }
     }
 }
@@ -141,17 +150,17 @@ fun List(modifier: Modifier = Modifier){
 @Composable
 fun ToDoAppUI(modifier: Modifier = Modifier){
     val AppIcons = Icons.Rounded
-    Column (
-        modifier = modifier.fillMaxSize(),
-//        horizontalAlignment = Alignment.CenterHorizontally,
+    val listItems = remember { mutableStateListOf<ListItem>() }
 
+    Column (
+        modifier = modifier.fillMaxSize()
     ) {
-        Header(AppIcons.Delete, AppIcons.Add, modifier)
+        Header(listItems, AppIcons.Delete, AppIcons.Add, modifier)
         Divider(
             thickness = 2.dp,
             color = Color.Black
         )
-        List(modifier)
+        List(listItems, modifier)
     }
 }
 @Preview(showBackground = true)
