@@ -6,9 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
@@ -20,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -97,6 +100,41 @@ fun Header(toDoList: MutableList<ListItem>, deleteIcon: ImageVector, addIcon: Im
 }
 
 @Composable
+fun EnterTextField(modifier: Modifier = Modifier){
+    Column (
+        modifier = modifier.fillMaxWidth(4/5f)
+    ){
+        TextField(
+            value = "",
+            onValueChange = {},
+            modifier = modifier.fillMaxWidth()
+        )
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Button(
+                onClick = {},
+                colors = buttonColors(containerColor = Color.Red)
+            ) {
+                Text(
+                    text = "CANCEL"
+                )
+            }
+            Spacer(modifier = modifier.width(10.dp))
+            Button(
+                onClick = {},
+                colors = buttonColors(containerColor = Color.Green)
+            ) {
+                Text(
+                    text = "OK"
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun Item(text: String, completed: Boolean, modifier: Modifier = Modifier){
     var checkedChange by remember { mutableStateOf(completed)}
 
@@ -143,6 +181,7 @@ fun List(toDoList: MutableList<ListItem>, modifier: Modifier = Modifier){
             val currentItem = listIterator.next()
             Item(currentItem.text, currentItem.checked, modifier)
         }
+        EnterTextField()
     }
 }
 
