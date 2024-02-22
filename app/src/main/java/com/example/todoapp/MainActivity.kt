@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Header(toDoList: MutableList<ListItem>, deleteIcon: ImageVector, addIcon: ImageVector, modifier: Modifier = Modifier) {
+fun Header(deleteIcon: ImageVector, addIcon: ImageVector, addOnClick: () -> Unit, modifier: Modifier = Modifier) {
     val buttonColors = buttonColors(containerColor = Color.Transparent, contentColor = Color.Black)
 
     // Header
@@ -84,9 +84,7 @@ fun Header(toDoList: MutableList<ListItem>, deleteIcon: ImageVector, addIcon: Im
         )
         // Add button
         Button(
-            onClick = {
-                toDoList.add(ListItem("An item to be completed", false))
-            },
+            onClick = addOnClick,
             shape = RectangleShape,
             colors = buttonColors
         ) {
@@ -181,7 +179,6 @@ fun List(toDoList: MutableList<ListItem>, modifier: Modifier = Modifier){
             val currentItem = listIterator.next()
             Item(currentItem.text, currentItem.checked, modifier)
         }
-        EnterTextField()
     }
 }
 
@@ -189,16 +186,29 @@ fun List(toDoList: MutableList<ListItem>, modifier: Modifier = Modifier){
 fun ToDoAppUI(modifier: Modifier = Modifier){
     val AppIcons = Icons.Rounded
     val listItems = remember { mutableStateListOf<ListItem>() }
+    var isTextFieldActive by remember { mutableStateOf(false)}
 
     Column (
         modifier = modifier.fillMaxSize()
     ) {
-        Header(listItems, AppIcons.Delete, AppIcons.Add, modifier)
+        Header(
+            deleteIcon = AppIcons.Delete,
+            addIcon = AppIcons.Add,
+            addOnClick = {
+                //listItems.add(ListItem("An item to be completed", false))
+                isTextFieldActive = true
+                      },
+            modifier = modifier
+        )
         Divider(
             thickness = 2.dp,
             color = Color.Black
         )
         List(listItems, modifier)
+
+        if(isTextFieldActive){
+            EnterTextField()
+        }
     }
 }
 @Preview(showBackground = true)
