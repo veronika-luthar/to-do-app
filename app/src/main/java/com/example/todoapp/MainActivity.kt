@@ -98,14 +98,19 @@ fun Header(deleteIcon: ImageVector, addIcon: ImageVector, addOnClick: () -> Unit
 }
 
 @Composable
-fun EnterTextField(modifier: Modifier = Modifier){
-    var text by remember { mutableStateOf("")}
+fun EnterTextField(
+    modifier: Modifier = Modifier,
+    value: String,
+    onValueChange: (String) -> Unit,
+    okOnClick: () -> Unit,
+    cancelOnClick: () -> Unit,
+                   ){
     Column (
         modifier = modifier.fillMaxWidth(4/5f)
     ){
         TextField(
-            value = text,
-            onValueChange = { text = it },
+            value = value,
+            onValueChange = onValueChange,
             modifier = modifier.fillMaxWidth()
         )
         Row(
@@ -113,7 +118,7 @@ fun EnterTextField(modifier: Modifier = Modifier){
             horizontalArrangement = Arrangement.End
         ) {
             Button(
-                onClick = {},
+                onClick = cancelOnClick,
                 colors = buttonColors(containerColor = Color.Red)
             ) {
                 Text(
@@ -122,7 +127,7 @@ fun EnterTextField(modifier: Modifier = Modifier){
             }
             Spacer(modifier = modifier.width(10.dp))
             Button(
-                onClick = {},
+                onClick = okOnClick,
                 colors = buttonColors(containerColor = Color.Green)
             ) {
                 Text(
@@ -186,8 +191,10 @@ fun List(toDoList: MutableList<ListItem>, modifier: Modifier = Modifier){
 @Composable
 fun ToDoAppUI(modifier: Modifier = Modifier){
     val AppIcons = Icons.Rounded
+
     val listItems = remember { mutableStateListOf<ListItem>() }
     var isTextFieldActive by remember { mutableStateOf(false)}
+    var text by remember { mutableStateOf("")}
 
     Column (
         modifier = modifier.fillMaxSize()
@@ -208,7 +215,19 @@ fun ToDoAppUI(modifier: Modifier = Modifier){
         List(listItems, modifier)
 
         if(isTextFieldActive){
-            EnterTextField()
+            EnterTextField(
+                modifier = modifier,
+                value = text,
+                onValueChange = { text = it },
+                cancelOnClick = {
+                                isTextFieldActive = false
+                },
+                okOnClick = {
+                    listItems.add(ListItem(text, false))
+                    text = ""
+                    isTextFieldActive = false
+                }
+            )
         }
     }
 }
