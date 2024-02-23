@@ -99,12 +99,13 @@ fun Header(deleteIcon: ImageVector, addIcon: ImageVector, addOnClick: () -> Unit
 
 @Composable
 fun EnterTextField(modifier: Modifier = Modifier){
+    var text by remember { mutableStateOf("")}
     Column (
         modifier = modifier.fillMaxWidth(4/5f)
     ){
         TextField(
-            value = "",
-            onValueChange = {},
+            value = text,
+            onValueChange = { text = it },
             modifier = modifier.fillMaxWidth()
         )
         Row(
