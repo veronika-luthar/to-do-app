@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.Checkbox
@@ -58,7 +59,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Header(deleteIcon: ImageVector, addIcon: ImageVector, addOnClick: () -> Unit, modifier: Modifier = Modifier) {
+fun Header(deleteIcon: ImageVector, addIcon: ImageVector, addOnClick: () -> Unit, deleteOnClick: () -> Unit, modifier: Modifier = Modifier) {
     val buttonColors = buttonColors(containerColor = Color.Transparent, contentColor = Color.Black)
 
     // Header
@@ -68,7 +69,7 @@ fun Header(deleteIcon: ImageVector, addIcon: ImageVector, addOnClick: () -> Unit
     ) {
         // Delete button
         Button(
-            onClick = {},
+            onClick = deleteOnClick,
             shape = RectangleShape,
             colors = buttonColors
         ) {
@@ -195,6 +196,8 @@ fun ToDoAppUI(modifier: Modifier = Modifier){
     val listItems = remember { mutableStateListOf<ListItem>() }
     var isTextFieldActive by remember { mutableStateOf(false)}
     var text by remember { mutableStateOf("")}
+    var promptDialog by remember { mutableStateOf(false)}
+
 
     Column (
         modifier = modifier.fillMaxSize()
@@ -206,6 +209,9 @@ fun ToDoAppUI(modifier: Modifier = Modifier){
                 //listItems.add(ListItem("An item to be completed", false))
                 isTextFieldActive = true
                       },
+            deleteOnClick = {
+                promptDialog = true
+            },
             modifier = modifier
         )
         Divider(
@@ -227,6 +233,35 @@ fun ToDoAppUI(modifier: Modifier = Modifier){
                     text = ""
                     isTextFieldActive = false
                 }
+            )
+        }
+        if(promptDialog) {
+            AlertDialog(
+                onDismissRequest = {
+                    promptDialog = false
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            promptDialog = false
+                            listItems.clear()
+                        }
+                    ) {
+                        Text(text = "Confirm")
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = {
+                            promptDialog = false
+                        }
+                    ) {
+                        Text(text = "Cancel")
+                    }
+                },
+                text = {
+                    Text(text = "Clear page?")
+                },
             )
         }
     }
