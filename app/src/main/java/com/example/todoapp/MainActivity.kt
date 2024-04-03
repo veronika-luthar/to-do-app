@@ -123,7 +123,7 @@ fun EnterTextField(
         ) {
             Button(
                 onClick = cancelOnClick,
-                colors = buttonColors(containerColor = Color.Red)
+                colors = buttonColors(containerColor = Color(red = 200, green = 25, blue = 25))
             ) {
                 Text(
                     text = "CANCEL"
@@ -132,7 +132,7 @@ fun EnterTextField(
             Spacer(modifier = modifier.width(10.dp))
             Button(
                 onClick = okOnClick,
-                colors = buttonColors(containerColor = Color.Green)
+                colors = buttonColors(containerColor = Color(red = 85, green = 150, blue = 200))
             ) {
                 Text(
                     text = "OK"
@@ -166,9 +166,7 @@ fun Item(text: String,
             checked = checkedChange,
             onCheckedChange = {
                 checkedChange = !checkedChange
-                // may need list elements
             },
-
         )
     }
     Divider(
@@ -212,7 +210,6 @@ fun ToDoAppUI(modifier: Modifier = Modifier){
             deleteIcon = AppIcons.Delete,
             addIcon = AppIcons.Add,
             addOnClick = {
-                //listItems.add(ListItem("An item to be completed", false))
                 isTextFieldActive = true
                       },
             deleteOnClick = {
@@ -232,7 +229,7 @@ fun ToDoAppUI(modifier: Modifier = Modifier){
                 value = text,
                 onValueChange = { text = it },
                 cancelOnClick = {
-                                isTextFieldActive = false
+                    isTextFieldActive = false
                 },
                 okOnClick = {
                     listItems.add(ListItem(text, false))
@@ -251,7 +248,8 @@ fun ToDoAppUI(modifier: Modifier = Modifier){
                         onClick = {
                             promptDialog = false
                             listItems.clear()
-                        }
+                        },
+                        colors = buttonColors(containerColor = Color(red = 85, green = 150, blue = 200))
                     ) {
                         Text(text = "Confirm")
                     }
@@ -260,7 +258,8 @@ fun ToDoAppUI(modifier: Modifier = Modifier){
                     Button(
                         onClick = {
                             promptDialog = false
-                        }
+                        },
+                        colors = buttonColors(containerColor = Color(red = 200, green = 25, blue = 25))
                     ) {
                         Text(text = "Cancel")
                     }
