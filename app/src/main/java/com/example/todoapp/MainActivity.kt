@@ -59,7 +59,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Header(deleteIcon: ImageVector, addIcon: ImageVector, addOnClick: () -> Unit, deleteOnClick: () -> Unit, modifier: Modifier = Modifier) {
+fun Header(deleteIcon: ImageVector,
+           addIcon: ImageVector,
+           addOnClick: () -> Unit,
+           deleteOnClick: () -> Unit,
+           modifier: Modifier = Modifier) {
     val buttonColors = buttonColors(containerColor = Color.Transparent, contentColor = Color.Black)
 
     // Header
@@ -104,8 +108,7 @@ fun EnterTextField(
     value: String,
     onValueChange: (String) -> Unit,
     okOnClick: () -> Unit,
-    cancelOnClick: () -> Unit,
-                   ){
+    cancelOnClick: () -> Unit){
     Column (
         modifier = modifier.fillMaxWidth(4/5f)
     ){
@@ -140,7 +143,9 @@ fun EnterTextField(
 }
 
 @Composable
-fun Item(text: String, completed: Boolean, modifier: Modifier = Modifier){
+fun Item(text: String,
+         completed: Boolean,
+         modifier: Modifier = Modifier){
     var checkedChange by remember { mutableStateOf(completed)}
 
     Row(
@@ -174,7 +179,8 @@ fun Item(text: String, completed: Boolean, modifier: Modifier = Modifier){
 }
 
 @Composable
-fun List(toDoList: MutableList<ListItem>, modifier: Modifier = Modifier){
+fun List(toDoList: MutableList<ListItem>,
+         modifier: Modifier = Modifier){
 
     // List
     Column(
